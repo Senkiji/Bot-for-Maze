@@ -118,8 +118,34 @@ class pos:
     
 def check_up(self):
     next_move = pos(self.ply.y-1,self.ply.x)
-    if self.maze[next_move.y][next_move.x] == " ":
-        print("ข้างบนเดินได้ไอโง่")
+    if self.isInBound(next_move.y,next_move.x):
+        if self.maze[next_move.y][next_move.x] == " ":
+            print("ข้างบนเดินได้ไอโง่")
+            return
+
+def check_down(self):
+    next_move = pos(self.ply.y+1,self.ply.x)
+    if self.isInBound(next_move.y,next_move.x):
+        if self.maze[next_move.y][next_move.x] == " ":
+            print("ข้างล่างเดินได้ไอโง่")
+            return
+
+def check_left(self):
+    next_move = pos(self.ply.y,self.ply.x-1)
+    if self.isInBound(next_move.y,next_move.x):
+        if self.maze[next_move.y][next_move.x] == " ":
+            print("ข้างซ้ายเดินได้ไอโง่")
+            return
+
+def check_right(self):
+    next_move = pos(self.ply.y,self.ply.x-1)
+    if self.isInBound(next_move.y,next_move.x):
+        if self.maze[next_move.y][next_move.x] == " ":
+            print("ข้างขวาเดินได้ไอโง่")
+            return
+        
+def auto_move(self):
+    a
 
         
 # Main
@@ -129,10 +155,8 @@ if __name__ == '__main__':
     m = maze()
     m.print()
 
-    check_up(m)
-
-    # while True:
-    #     if m.move_up():
-    #         m.print()
+    while True:
+        if m.move_up():
+            m.print()
 
     
