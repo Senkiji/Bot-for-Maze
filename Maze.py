@@ -121,10 +121,10 @@ def check_up(self):
     if self.isInBound(next_move.y,next_move.x):
         if self.maze[next_move.y][next_move.x] == " ":
             print("ข้างบนเดินได้ไอโง่")
-            return True
+            
         else:
             return False
-
+    return True
 def check_down(self):
     next_move = pos(self.ply.y+1,self.ply.x)
     if self.isInBound(next_move.y,next_move.x):
@@ -135,7 +135,7 @@ def check_down(self):
             return False
 
 def check_left(self):
-    next_move = pos(self.ply.y,self.ply.x-1)
+    next_move = pos(self.ply.y, self.ply.x-1)
     if self.isInBound(next_move.y,next_move.x):
         if self.maze[next_move.y][next_move.x] == " ":
             print("ข้างซ้ายเดินได้ไอโง่")
@@ -144,7 +144,7 @@ def check_left(self):
             return False
 
 def check_right(self):
-    next_move = pos(self.ply.y,self.ply.x-1)
+    next_move = pos(self.ply.y, self.ply.x+1)
     if self.isInBound(next_move.y,next_move.x):
         if self.maze[next_move.y][next_move.x] == " ":
             print("ข้างขวาเดินได้ไอโง่")
@@ -157,12 +157,35 @@ def auto_move(self):
     down = False
     left = False
     right = False
-    way_to_go =[up,down,left,right]
-    print(way_to_go)
     
     up = check_up(self)
-    if way_to_go == [True,False,False,False] or way_to_go == [True,True,False,False]:
-        print("walk up")
+    down = check_down(self)
+    left = check_left(self)
+    right = check_right(self)
+
+    way_to_go =[up,down,left,right]
+
+    print(way_to_go)
+    while True:
+        if up == True:
+            self.move_up()
+            self.print()
+        else:
+            break
+        if left == True:
+            self.move_left()
+            self.print()
+        else:
+            break
+        if right == True:
+            self.move_right
+            self.print()
+        else:
+            self.move_down()
+            break
+
+        
+        
 
         
 # Main
@@ -171,12 +194,47 @@ if __name__ == '__main__':
 
     m = maze()
     m.print()
-    auto_move(m)
+    # auto_move(m)
 
     # while True:
     #     if m.move_up():
     #         m.print()
-        
+
+    while True:
+        if keyboard.is_pressed("q"):
+            print("Quit Program")
+            break
+        if keyboard.is_pressed("w"):
+            auto_move(m)
+            # if m.move_up():
+            #     m.print()
+                
+            # else:
+            #     break
+        if keyboard.is_pressed("s"):
+            if m.move_down():
+                m.print()
+                auto_move(m)
+            else:
+                break
+        if keyboard.is_pressed("a"):
+            if m.move_left():
+                m.print()
+                auto_move(m)
+            else:
+                break
+        if keyboard.is_pressed("d"):
+            if m.move_right():
+                m.print()
+                auto_move(m)
+            else:
+                break
+        # if keyboard.is_pressed("k"):
+        #     if m.print():
+        #         auto_move(m)
+        # else:
+        #     break
+
 
 
     
