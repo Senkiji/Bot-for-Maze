@@ -1,6 +1,7 @@
 import os
 import keyboard
 import time
+import Stack as stk
 
 # Class
 class maze:
@@ -44,7 +45,7 @@ class maze:
         next_move = pos(self.ply.y-1, self.ply.x) #ตำแหน่ง x y
         if self.isInBound(next_move.y,next_move.x):
             if self.maze[next_move.y][next_move.x] == " ":
-                self.maze[self.ply.y][self.ply.x] = " "
+                self.maze[self.ply.y][self.ply.x] = "1"
                 self.maze[next_move.y][next_move.x] = "P"
                 self.ply = next_move
                 time.sleep(0.25)
@@ -57,7 +58,7 @@ class maze:
         next_move = pos(self.ply.y+1, self.ply.x)
         if self.isInBound(next_move.y,next_move.x):
             if self.maze[next_move.y][next_move.x] == " ":
-                self.maze[self.ply.y][self.ply.x] = " "
+                self.maze[self.ply.y][self.ply.x] = "1"
                 self.maze[next_move.y][next_move.x] = "P"
                 self.ply = next_move
                 time.sleep(0.25)
@@ -70,7 +71,7 @@ class maze:
         next_move = pos(self.ply.y, self.ply.x-1)
         if self.isInBound(next_move.y,next_move.x):
             if self.maze[next_move.y][next_move.x] == " ":
-                self.maze[self.ply.y][self.ply.x] = " "
+                self.maze[self.ply.y][self.ply.x] = "1"
                 self.maze[next_move.y][next_move.x] = "P"
                 self.ply = next_move
                 time.sleep(0.25)
@@ -83,7 +84,7 @@ class maze:
         next_move = pos(self.ply.y, self.ply.x+1)
         if self.isInBound(next_move.y,next_move.x):
             if self.maze[next_move.y][next_move.x] == " ":
-                self.maze[self.ply.y][self.ply.x] = " "
+                self.maze[self.ply.y][self.ply.x] = "1"
                 self.maze[next_move.y][next_move.x] = "P"
                 self.ply = next_move
                 time.sleep(0.25)
@@ -92,18 +93,71 @@ class maze:
                 return False
         return True
     
-    # def auto_test(self):
-    #     check_up = pos(self.ply.y-1,self.ply.x)
-    #     if self.isInBound(check_up.y,check_up.x):
-    #         if self.maze[check_up.y][check_up.x] == " ":
-    #             self.maze[self.ply.y][self.ply.x] = "1"
-    #             self.maze[check_up.y][check_up.x] = "P"
-    #             self.ply = check_up
-    #             time.sleep(0.25)
-    #         if self.maze[check_up.y][check_up.x] == "E":
-    #             self.printEND()
-    #             return False
-    #     return True
+    def check_way(self):
+        positon = pos(self.ply.y, self.ply.x)
+        if self.isInBound(positon.y-1,positon.x):
+            if self.maze[positon.y-1][positon.x] == " ":
+                up = True
+            elif self.maze[positon.y-1][positon.x] == "E":
+                up = True
+            elif self.maze[positon.y-1][positon.x] == "X":
+                up = False
+            else:
+                up = False
+        else:
+            up = False
+        if self.isInBound(positon.y+1,positon.x):
+            if self.maze[positon.y+1][positon.x] == " ":
+                down = True
+            elif self.maze[positon.y+1][positon.x] == "E":
+                down = True
+            elif self.maze[positon.y+1][positon.x] == "X":
+                down = False
+            else:
+                down = False
+        else:
+            down = False
+        if self.isInBound(positon.y,positon.x-1):
+            if self.maze[positon.y][positon.x-1] == " ":
+                left = True
+            elif self.maze[positon.y][positon.x-1] == "E":
+                left = True
+            elif self.maze[positon.y][positon.x-1] == "X":
+                left = False
+            else:
+                left = False
+        else:
+            left = False
+        if self.isInBound(positon.y,positon.x+1):
+            if self.maze[positon.y][positon.x+1] == " ":
+                right = True
+            elif self.maze[positon.y][positon.x+1] == "E":
+                right = True
+            elif self.maze[positon.y][positon.x+1] == "X":
+                right = False
+            else:
+                right = False
+        else:
+            right = False
+        a = waycan(up,down,left,right)
+        return a
+
+    def clearway(self):
+        posnow = pos(self.ply.y, self.ply.x)
+        part = self.check_way()
+        if not(part.up or part.down or part.left or part.right):
+            if self.isInBound(posnow.y-1,posnow.x):
+                if self.maze[posnow.y-1][posnow.x] == "1" :
+                    self.maze[posnow.y-1][posnow.x] = " "
+            if self.isInBound(posnow.y+1,posnow.x):
+                if self.maze[posnow.y+1][posnow.x] == "1" :
+                    self.maze[posnow.y+1][posnow.x] = " "
+            if self.isInBound(posnow.y,posnow.x-1):
+                if self.maze[posnow.y][posnow.x-1] == "1" :
+                    self.maze[posnow.y][posnow.x-1] = " "
+            if self.isInBound(posnow.y,posnow.x+1):
+                if self.maze[posnow.y][posnow.x+1] == "1" :
+                    self.maze[posnow.y][posnow.x+1] = " "
 
 class pos:
     def __init__(self) -> None:
@@ -114,9 +168,17 @@ class pos:
         self.y = y
         self.x = x
 
+class waycan:
+
+    def __init__(self, u, d, r, l) -> None:
+        self.up = u
+        self.down = d
+        self.right = r
+        self.left = l
+
 # Funtion
     
-def check_up(self):
+def check_up(self): # ไม่ได้ใช้
     next_move = pos(self.ply.y-1,self.ply.x)
     if self.isInBound(next_move.y,next_move.x):
         if self.maze[next_move.y][next_move.x] == " ":
@@ -125,7 +187,7 @@ def check_up(self):
         else:
             return False
     return True
-def check_down(self):
+def check_down(self): # ไม่ได้ใช้
     next_move = pos(self.ply.y+1,self.ply.x)
     if self.isInBound(next_move.y,next_move.x):
         if self.maze[next_move.y][next_move.x] == " ":
@@ -134,7 +196,7 @@ def check_down(self):
         else:
             return False
 
-def check_left(self):
+def check_left(self): # ไม่ได้ใช้
     next_move = pos(self.ply.y, self.ply.x-1)
     if self.isInBound(next_move.y,next_move.x):
         if self.maze[next_move.y][next_move.x] == " ":
@@ -143,7 +205,7 @@ def check_left(self):
         else:
             return False
 
-def check_right(self):
+def check_right(self): # ไม่ได้ใช้
     next_move = pos(self.ply.y, self.ply.x+1)
     if self.isInBound(next_move.y,next_move.x):
         if self.maze[next_move.y][next_move.x] == " ":
@@ -152,7 +214,7 @@ def check_right(self):
         else:
             return False
         
-def auto_move(self):
+def auto_move(self): # ไม่ได้ใช้
     up = False
     down = False
     left = False
@@ -194,46 +256,70 @@ if __name__ == '__main__':
 
     m = maze()
     m.print()
-    # auto_move(m)
+    a = m.check_way()
+    print(a.up,a.down,a.left,a.right)
 
-    # while True:
-    #     if m.move_up():
-    #         m.print()
+    old_x = m.ply.x 
+    old_y = m.ply.y
+
+    # if (old_x == m.ply.x and old_y == m.ply.y) :
+    
+    x = stk.Stack()
 
     while True:
-        if keyboard.is_pressed("q"):
-            print("Quit Program")
-            break
-        if keyboard.is_pressed("w"):
-            auto_move(m)
-            # if m.move_up():
-            #     m.print()
-                
-            # else:
-            #     break
-        if keyboard.is_pressed("s"):
-            if m.move_down():
-                m.print()
-                auto_move(m)
-            else:
-                break
-        if keyboard.is_pressed("a"):
-            if m.move_left():
-                m.print()
-                auto_move(m)
-            else:
-                break
-        if keyboard.is_pressed("d"):
-            if m.move_right():
-                m.print()
-                auto_move(m)
-            else:
-                break
-        # if keyboard.is_pressed("k"):
-        #     if m.print():
-        #         auto_move(m)
-        # else:
-        #     break
+
+        if x._top == None:
+                if m.move_up():
+                    m.print()
+                    x.push(1)
+                else:
+                    break
+        if x._top.item == 1 or x._top.item == 5:
+                if m.move_up():
+                    m.print()
+                    print(x._top.item)
+                    x.push(1)
+                else:
+                    break
+        if x._top.item == 2:
+                if m.move_left():
+                    m.print()
+                    x.push(2)
+                    print(x._top.item)
+                else:
+                    break
+        if x._top.item == 3:
+                if m.move_right():
+                    m.print()
+                    print(x._top.item)
+                    x.push(3)
+                else:
+                    break
+        if x._top.item == 4:
+                if m.move_down():
+                    m.print()
+                    x.push(4)
+                    print(x._top.item)
+                else:
+                    break
+
+        if (old_x == m.ply.x and old_y == m.ply.y) :
+            if x._top.item == 4:
+                x.pop()
+                x.push(5)
+            elif x._top.item == 3:
+                x.pop()
+                x.push(4)
+            elif x._top.item == 2:
+                x.pop()
+                x.push(3)
+            elif x._top.item == 1:
+                x.pop()
+                x.push(2)
+            m.clearway()
+
+        old_x = m.ply.x 
+        old_y = m.ply.y
 
 
 
